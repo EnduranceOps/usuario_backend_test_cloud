@@ -2,20 +2,31 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
+  const email = "juan@email.com";
+
+  const usuarioExistente = await prisma.usuario.findUnique({
+    where: { email: email }
+  });
+
+  if (usuarioExistente) {
+    console.log("⚠️ El usuario ya existe, no se creó nuevamente.");
+    return;
+  }
+
   await prisma.usuario.create({
     data: {
       nombre: "Juan",
-      email: "juan@email.com"
+      email: email
     }
   });
+
+  console.log("Usuario creado correctamente");
 }
 
 main()
-  .then(() => {
-    console.log("Seed ejecutada 🌱");
-    prisma.$disconnect();
-  })
   .catch((e) => {
-    console.error(e);
-    prisma.$disconnect();
+    console.error("Error en seed:", e);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });
