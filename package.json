@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "start": "node src/index.js",
+  "start": "node scripts/init.js",
   "dev": "nodemon src/index.js"
   },
   "prisma": {
@@ -17,7 +17,9 @@
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "express": "^5.2.1",
-    "prisma": "^5.22.0"
+    "prisma": "^5.22.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.1.4"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
