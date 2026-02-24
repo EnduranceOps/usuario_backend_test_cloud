@@ -1,22 +1,22 @@
-FROM node:18-alpine
+FROM node:18-slim
+
+RUN apt-get update -y && apt-get install -y openssl libssl-dev ca-certificates
 
 WORKDIR /app
 
-# install production dependencies first
+
 COPY package*.json ./
-RUN npm ci --omit=dev
+COPY prisma ./prisma/
 
-# copy app sources
-COPY . .
 
-# generate prisma client
+RUN npm install
 RUN npx prisma generate
 
-ENV NODE_ENV=production
-EXPOSE 3000
 
-COPY docker-entrypoint.sh ./docker-entrypoint.sh
-RUN chmod +x ./docker-entrypoint.sh
+COPY . .
 
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+
+ENV PORT=8080
+EXPOSE 8080
+
 CMD ["node", "src/index.js"]
