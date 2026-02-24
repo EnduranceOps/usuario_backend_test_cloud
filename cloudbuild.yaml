@@ -1,0 +1,30 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-west1-docker.pkg.dev/sondacloud-488321/my-artifacts/backend-app', '.']
+
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-west1-docker.pkg.dev/sondacloud-488321/my-artifacts/backend-app']
+
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'backend-service'
+      - '--image'
+      - 'us-west1-docker.pkg.dev/sondacloud-488321/my-artifacts/backend-app'
+      - '--region'
+      - 'us-west1'
+      - '--allow-unauthenticated' 
+      - '--add-cloudsql-instances'
+      - 'sondacloud-488321:us-west1:free-trial-first-project'
+      - '--set-env-vars'
+      - 'DATABASE_URL=${_DATABASE_URL}'
+
+images:
+  - 'us-west1-docker.pkg.dev/sondacloud-488321/my-artifacts/backend-app'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
