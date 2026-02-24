@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "start": "node scripts/init.js",
   "dev": "nodemon src/index.js"
   },
   "prisma": {
